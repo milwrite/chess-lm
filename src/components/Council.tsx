@@ -1,10 +1,14 @@
 import { ChevronDown, Cross, Eye, Skull, Swords } from 'lucide-react'
 import type { CouncilReading, GuideId } from '../model/modelGuide'
+import type { CoachState } from '../model/ollamaCoach'
+import { OllamaCoach } from './OllamaCoach'
 
 type CouncilProps = {
   reading: CouncilReading | null
+  coach: CoachState
   activeGuide: GuideId
   onGuideChange: (guide: GuideId) => void
+  onCoachRetry: () => void
   thinking: boolean
 }
 
@@ -22,8 +26,10 @@ const waitingCopy = {
 
 export function Council({
   reading,
+  coach,
   activeGuide,
   onGuideChange,
+  onCoachRetry,
   thinking,
 }: CouncilProps) {
   const advisers = reading?.advisers ?? [
@@ -78,6 +84,8 @@ export function Council({
           )
         })}
       </div>
+
+      <OllamaCoach coach={coach} onRetry={onCoachRetry} />
 
       <div className={`death-decision ${thinking ? 'death-decision--thinking' : ''}`}>
         <div className="death-decision__heading">

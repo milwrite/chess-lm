@@ -16,6 +16,8 @@ concurrency:
 
 jobs:
   test-and-deploy:
+    env:
+      VITE_COACH_API_URL: ${{ vars.COACH_API_URL }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -20,6 +20,12 @@ import {
   type CouncilReading,
   type GuideId,
 } from './model/modelGuide'
+import {
+  INITIAL_COACH_STATE,
+  requestCoach,
+  type CoachRequest,
+  type CoachState,
+} from './model/ollamaCoach'
 import './App.css'
 
 type EngineState = 'loading' | 'ready' | 'error'
@@ -38,6 +44,8 @@ function App() {
   const engineRef = useRef<StockfishClient | null>(null)
   const searchIdRef = useRef(0)
   const audioRef = useRef<AudioContext | null>(null)
+  const coachAbortRef = useRef<AbortController | null>(null)
+  const lastCoachRequestRef = useRef<CoachRequest | null>(null)
   const [fen, setFen] = useState(gameRef.current.fen())
   const [history, setHistory] = useState<Move[]>([])
   const [orientation, setOrientation] = useState<'white' | 'black'>('white')
@@ -48,6 +56,7 @@ function App() {
   const [engineState, setEngineState] = useState<EngineState>('loading')
   const [engineError, setEngineError] = useState('')
   const [council, setCouncil] = useState<CouncilReading | null>(null)
+  const [coach, setCoach] = useState<CoachState>(INITIAL_COACH_STATE)
   const [activeGuide, setActiveGuide] = useState<GuideId>('witness')
   const [activeTab, setActiveTab] = useState<'moves' | 'method'>('moves')
   const [soundOn, setSoundOn] = useState(true)
@@ -65,9 +74,49 @@ function App() {
 
     return () => {
       searchIdRef.current += 1
+      coachAbortRef.current?.abort()
       engine.terminate()
       engineRef.current = null
     }
+  }, [])
+
+  const runCoach = useCallback(async (position: CoachRequest) => {
+    coachAbortRef.current?.abort()
+    const controller = new AbortController()
+    coachAbortRef.current = controller
+    lastCoachRequestRef.current = position
+    setCoach({
+      status: 'loading',
+      message: 'DeepSeek is reading the position and Stockfish lines.',
+    })
+
+    try {
+      const result = await requestCoach(position, controller.signal)
+      if (coachAbortRef.current !== controller) return
+      setCoach({
+        status: 'ready',
+        message: result.coach,
+        model: result.model,
+        cached: result.cached,
+      })
+    } catch (error) {
+      if (controller.signal.aborted || coachAbortRef.current !== controller) return
+      setCoach({
+        status: 'error',
+        message: error instanceof Error ? error.message : 'The Ollama coach paused unexpectedly.',
+      })
+    }
+  }, [])
+
+  const retryCoach = useCallback(() => {
+    if (lastCoachRequestRef.current) void runCoach(lastCoachRequestRef.current)
+  }, [runCoach])
+
+  const clearCoach = useCallback(() => {
+    coachAbortRef.current?.abort()
+    coachAbortRef.current = null
+    lastCoachRequestRef.current = null
+    setCoach(INITIAL_COACH_STATE)
   }, [])
 
   const syncGame = useCallback(() => {
@@ -118,6 +167,18 @@ function App() {
       setCouncil(reading)
       setActiveGuide('witness')
 
+      const playerMove = game.history({ verbose: true }).at(-1)?.san ?? '—'
+      void runCoach({
+        fen: positionBeforeSearch,
+        pgn: game.pgn(),
+        playerMove,
+        candidates: reading.advisers.map(({ move, evaluation, continuation }) => ({
+          move,
+          evaluation,
+          continuation,
+        })),
+      })
+
       await new Promise((resolve) => window.setTimeout(resolve, 460))
       if (searchId !== searchIdRef.current) return
 
@@ -135,7 +196,7 @@ function App() {
     } finally {
       if (searchId === searchIdRef.current) setThinking(false)
     }
-  }, [playMoveSound, syncGame])
+  }, [playMoveSound, runCoach, syncGame])
 
   const commitPlayerMove = useCallback(
     (source: string, target: string) => {
@@ -198,6 +259,7 @@ function App() {
     searchIdRef.current += 1
     gameRef.current.reset()
     setCouncil(null)
+    clearCoach()
     setLastMove(null)
     setSelectedSquare(null)
     setLegalSquares([])
@@ -205,7 +267,7 @@ function App() {
     setEngineError('')
     if (engineRef.current) setEngineState('ready')
     syncGame()
-  }, [syncGame])
+  }, [clearCoach, syncGame])
 
   const undoTurn = useCallback(() => {
     if (thinking) return
@@ -216,10 +278,11 @@ function App() {
     if (game.turn() === 'b' && game.history().length) game.undo()
     setLastMove(null)
     setCouncil(null)
+    clearCoach()
     setSelectedSquare(null)
     setLegalSquares([])
     syncGame()
-  }, [syncGame, thinking])
+  }, [clearCoach, syncGame, thinking])
 
   const squareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {}
@@ -354,8 +417,10 @@ function App() {
 
         <Council
           reading={council}
+          coach={coach}
           activeGuide={activeGuide}
           onGuideChange={setActiveGuide}
+          onCoachRetry={retryCoach}
           thinking={thinking}
         />
 
