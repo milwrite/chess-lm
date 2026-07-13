@@ -10,6 +10,7 @@ const position = {
   fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
   pgn: '1. e4',
   playerMove: 'e4',
+  engineMove: 'c5',
   candidates: [
     { move: 'c5', evaluation: '+0.18', continuation: 'c5 Nf3 Nc6' },
     { move: 'e5', evaluation: '+0.10', continuation: 'e5 Nf3' },
@@ -23,6 +24,7 @@ test('validates a bounded chess position', () => {
 test('places supplied Stockfish lines in the coach prompt', () => {
   const messages = buildCoachMessages(position)
   assert.match(messages[0].content, /Stockfish owns move selection/)
+  assert.match(messages[1].content, /Stockfish played reply: c5/)
   assert.match(messages[1].content, /c5 \| \+0\.18 \| c5 Nf3 Nc6/)
 })
 

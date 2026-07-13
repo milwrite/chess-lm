@@ -58,7 +58,7 @@ export function MoveLedger({ history, activeTab, onTabChange }: MoveLedgerProps)
           <p>
             Stockfish 18 owns the legal move and runs at UCI Skill Level 8. Its
             three principal variations become bounded briefs for the advisers and
-            the Ollama coach. DeepSeek explains the position, while engine output
+            Chess Coach. DeepSeek explains the position, while engine output
             alone changes the board.
           </p>
           <ul>
@@ -69,7 +69,7 @@ export function MoveLedger({ history, activeTab, onTabChange }: MoveLedgerProps)
               </li>
             ))}
             <li>
-              <strong>Ollama coach</strong>
+              <strong>Chess Coach</strong>
               <span>Turns supplied engine lines into a practical plan for your next turn.</span>
             </li>
           </ul>

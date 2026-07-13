@@ -103,7 +103,7 @@ function App() {
       if (controller.signal.aborted || coachAbortRef.current !== controller) return
       setCoach({
         status: 'error',
-        message: error instanceof Error ? error.message : 'The Ollama coach paused unexpectedly.',
+        message: error instanceof Error ? error.message : 'Chess Coach paused unexpectedly.',
       })
     }
   }, [])
@@ -154,6 +154,7 @@ function App() {
     if (!engine || game.isGameOver() || game.turn() !== 'b') return
 
     const positionBeforeSearch = game.fen()
+    const playerMove = game.history({ verbose: true }).at(-1)?.san ?? '—'
     const searchId = ++searchIdRef.current
     setThinking(true)
     setSelectedSquare(null)
@@ -167,18 +168,6 @@ function App() {
       setCouncil(reading)
       setActiveGuide('witness')
 
-      const playerMove = game.history({ verbose: true }).at(-1)?.san ?? '—'
-      void runCoach({
-        fen: positionBeforeSearch,
-        pgn: game.pgn(),
-        playerMove,
-        candidates: reading.advisers.map(({ move, evaluation, continuation }) => ({
-          move,
-          evaluation,
-          continuation,
-        })),
-      })
-
       await new Promise((resolve) => window.setTimeout(resolve, 460))
       if (searchId !== searchIdRef.current) return
 
@@ -189,6 +178,17 @@ function App() {
       playMoveSound()
       syncGame()
       setEngineError('')
+      void runCoach({
+        fen: game.fen(),
+        pgn: game.pgn(),
+        playerMove,
+        engineMove: move.san,
+        candidates: reading.advisers.map(({ move: candidate, evaluation, continuation }) => ({
+          move: candidate,
+          evaluation,
+          continuation,
+        })),
+      })
     } catch (error) {
       if (searchId !== searchIdRef.current) return
       setEngineState('error')

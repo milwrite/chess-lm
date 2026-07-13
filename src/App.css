@@ -422,38 +422,37 @@
   line-height: 1.6;
 }
 
-.ollama-coach {
+.chess-coach {
   position: relative;
-  margin-top: 1rem;
-  padding: 0.9rem 1rem 0.85rem;
-  overflow: hidden;
-  background: rgba(225, 221, 209, 0.035);
-  border: 1px solid var(--rule);
-  border-left: 2px solid #6f736d;
+  margin-top: 1.35rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
 }
 
-.ollama-coach--loading {
-  border-left-color: var(--oxblood-bright);
-}
-
-.ollama-coach--ready {
-  border-left-color: #9a9d93;
-}
-
-.ollama-coach__heading {
+.chess-coach__heading {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.75rem;
 }
 
-.ollama-coach__heading > svg {
-  width: 24px;
-  height: 24px;
+.chess-coach__mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
   color: var(--bone-muted);
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  background: rgba(225, 221, 209, 0.025);
 }
 
-.ollama-coach h3 {
+.chess-coach__mark svg {
+  width: 17px;
+  height: 17px;
+}
+
+.chess-coach h3 {
   margin: 0;
   font-family: var(--display-font);
   font-size: 1.08rem;
@@ -461,33 +460,33 @@
   letter-spacing: 0.025em;
 }
 
-.ollama-coach__heading span {
+.chess-coach__heading div > span {
   display: block;
-  margin-top: 0.1rem;
-  color: #777a73;
-  font-size: 0.61rem;
-  letter-spacing: 0.08em;
+  margin-top: 0.12rem;
+  color: #858880;
+  font-size: 0.6rem;
+  letter-spacing: 0.075em;
   text-transform: uppercase;
 }
 
-.ollama-coach__status {
-  width: 8px;
-  height: 8px;
+.chess-coach__status {
+  width: 7px;
+  height: 7px;
   background: #666963;
   border-radius: 50%;
 }
 
-.ollama-coach--loading .ollama-coach__status {
+.chess-coach--loading .chess-coach__status {
   background: var(--oxblood-bright);
   box-shadow: 0 0 0 5px rgba(182, 73, 66, 0.1);
   animation: coach-pulse 1.15s ease-in-out infinite;
 }
 
-.ollama-coach--ready .ollama-coach__status {
+.chess-coach--ready .chess-coach__status {
   background: #afb2a8;
 }
 
-.ollama-coach--error .ollama-coach__status {
+.chess-coach--error .chess-coach__status {
   background: var(--oxblood-bright);
 }
 
@@ -498,21 +497,22 @@
   }
 }
 
-.ollama-coach > p {
-  margin: 0.7rem 0 0;
+.chess-coach > p {
+  margin: 0.75rem 0 0 3rem;
   color: var(--bone-muted);
   font-family: var(--display-font);
   font-size: 0.8rem;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
-.ollama-coach > button {
+.chess-coach > button {
   display: inline-flex;
   align-items: center;
   gap: 0.38rem;
-  margin-top: 0.65rem;
-  padding: 0;
-  color: #969990;
+  min-height: 36px;
+  margin: 0.45rem 0 0 3rem;
+  padding: 0.2rem 0;
+  color: #a2a59c;
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -521,11 +521,16 @@
   text-transform: uppercase;
 }
 
-.ollama-coach > button:hover {
+.chess-coach > button:hover {
   color: var(--bone);
 }
 
-.ollama-coach > button svg {
+.chess-coach > button:focus-visible {
+  outline: 1px solid var(--oxblood-bright);
+  outline-offset: 4px;
+}
+
+.chess-coach > button svg {
   width: 13px;
   height: 13px;
 }
@@ -984,8 +989,9 @@
     padding-top: 1rem;
   }
 
-  .ollama-coach {
-    margin-top: 0.9rem;
+  .chess-coach {
+    margin-top: 1rem;
+    padding-top: 1rem;
   }
 
   .death-decision__move {
@@ -1120,12 +1126,14 @@
     font-size: 1.24rem;
   }
 
-  .ollama-coach {
-    padding: 0.8rem;
+  .chess-coach > p {
+    margin-left: 0;
+    font-size: 0.76rem;
   }
 
-  .ollama-coach > p {
-    font-size: 0.76rem;
+  .chess-coach > button {
+    min-height: 44px;
+    margin-left: 0;
   }
 
   .death-decision > p {
@@ -1136,5 +1144,13 @@
     min-height: 70px;
     gap: 0.7rem;
     font-size: 0.74rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal--active i,
+  .death-decision--thinking .thinking-dots i,
+  .chess-coach--loading .chess-coach__status {
+    animation: none;
   }
 }

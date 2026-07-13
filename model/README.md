@@ -1,6 +1,6 @@
 # Chess / LM model guide
 
-The council and Ollama coach form a guidance set built for one narrow task: explain legal candidate moves from Stockfish at UCI Skill Level 8 while Stockfish retains authority over the board.
+The council and Chess Coach form a guidance set built for one narrow task: explain legal candidate moves from Stockfish at UCI Skill Level 8 while Stockfish retains authority over the board.
 
 ## Contract
 
@@ -10,7 +10,7 @@ The browser asks Stockfish for three principal variations. Each council role rec
 - The Knight covers checks, captures, threats, and tempo.
 - The Bishop covers pawn structure, development, space, and piece activity.
 
-Each local adviser selects one supplied candidate, preserves its notation, and stays within one sentence. The interface also sends the FEN, PGN, player move, and the same three candidates to `server/index.mjs`, which calls `deepseek-v4-flash:cloud` through Ollama Cloud. Provider credentials remain on that server route.
+Each local adviser selects one supplied candidate, preserves its notation, and stays within one sentence. The interface also sends the FEN after Death's move, PGN, player move, Stockfish reply, and the same three candidates to `server/index.mjs`, which calls `deepseek-v4-flash:cloud` through Ollama Cloud. Provider credentials remain on that server route.
 
 ## Move authority
 
