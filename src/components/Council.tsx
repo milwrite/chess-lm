@@ -1,7 +1,7 @@
 import { ChevronDown, Cross, Eye, Skull, Swords } from 'lucide-react'
 import type { CouncilReading, GuideId } from '../model/modelGuide'
 import type { CoachState } from '../model/ollamaCoach'
-import { OllamaCoach } from './OllamaCoach'
+import { ChessCoach } from './ChessCoach'
 
 type CouncilProps = {
   reading: CouncilReading | null
@@ -85,8 +85,6 @@ export function Council({
         })}
       </div>
 
-      <OllamaCoach coach={coach} onRetry={onCoachRetry} />
-
       <div className={`death-decision ${thinking ? 'death-decision--thinking' : ''}`}>
         <div className="death-decision__heading">
           <Skull aria-hidden="true" strokeWidth={1.2} />
@@ -105,6 +103,8 @@ export function Council({
             'Move first. The engine will search, and the council will read its candidate lines.'}
         </p>
       </div>
+
+      <ChessCoach coach={coach} onRetry={onCoachRetry} />
     </aside>
   )
 }

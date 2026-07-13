@@ -8,6 +8,7 @@ export type CoachRequest = {
   fen: string
   pgn: string
   playerMove: string
+  engineMove: string
   candidates: CoachCandidate[]
 }
 
@@ -35,7 +36,7 @@ export async function requestCoach(
   position: CoachRequest,
   signal?: AbortSignal,
 ): Promise<CoachReading> {
-  if (!endpoint) throw new Error('The Ollama coach service is being prepared.')
+  if (!endpoint) throw new Error('Chess Coach is being prepared.')
 
   const response = await fetch(`${endpoint}/api/coach`, {
     method: 'POST',
@@ -49,7 +50,7 @@ export async function requestCoach(
     throw new Error(
       typeof result.error === 'string'
         ? result.error
-        : 'The Ollama coach could not read this position.',
+        : 'Chess Coach could not read this position.',
     )
   }
 
@@ -58,7 +59,7 @@ export async function requestCoach(
     typeof result.model !== 'string' ||
     result.provider !== 'ollama-cloud'
   ) {
-    throw new Error('The Ollama coach returned an incomplete reply.')
+    throw new Error('Chess Coach returned an incomplete reply.')
   }
 
   return {

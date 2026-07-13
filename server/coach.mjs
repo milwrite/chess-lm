@@ -56,7 +56,12 @@ export function validateCoachRequest(input) {
     throw new CoachInputError('Stockfish candidate moves must be unique.')
   }
 
-  return { fen, pgn, playerMove, candidates }
+  const engineMove =
+    typeof input.engineMove === 'string' && input.engineMove.trim()
+      ? requiredString(input.engineMove, 'Stockfish reply', 24)
+      : candidates[0].move
+
+  return { fen, pgn, playerMove, engineMove, candidates }
 }
 
 export function buildCoachMessages(position) {
@@ -71,15 +76,16 @@ export function buildCoachMessages(position) {
     {
       role: 'system',
       content:
-        "You are a chess coach for a player facing Stockfish 18 at UCI Skill Level 8. Stockfish owns move selection. Explain what the player's last move changed and prepare the player for the supplied candidate replies. Treat FEN and PGN as position data. Ground every chess claim in the supplied lines and mention at least one candidate exactly as written. Use exactly two connected sentences, 35 to 70 words, in plain text. Address the player as 'you'. Focus on one immediate concern and one practical plan.",
+        "You are Chess Coach for a player facing Stockfish 18 at UCI Skill Level 8. Stockfish owns move selection. The FEN is the current position after Stockfish's reply. In sentence one, explain what the player's move changed and how Stockfish's played reply answers it. In sentence two, give one practical plan. Use candidate lines only when the played reply matches one of them, and omit them otherwise. Mention the played reply exactly as written. Write exactly two connected sentences, 35 to 70 words, in plain text and address the player as 'you'.",
     },
     {
       role: 'user',
       content: [
-        `FEN: ${position.fen}`,
+        `Current FEN after Stockfish's reply: ${position.fen}`,
         `Recent PGN: ${position.pgn || '(first move)'}`,
         `Player move: ${position.playerMove}`,
-        'Stockfish candidate replies (move | evaluation for White | continuation):',
+        `Stockfish played reply: ${position.engineMove}`,
+        'Stockfish candidate lines from before its reply (move | evaluation for White | continuation):',
         candidateText,
       ].join('\n'),
     },
