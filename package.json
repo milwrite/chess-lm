@@ -4,13 +4,17 @@
   "version": "1.0.0",
   "description": "A Seventh Seal-inspired chess game with Stockfish Level 8 and an engine-grounded model council.",
   "license": "GPL-3.0-only",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "node server/index.mjs",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "vitest run && npm run validate:model",
+    "test": "vitest run src && node --test server/*.test.mjs && npm run validate:model",
     "validate:model": "node scripts/validate-model-set.mjs"
   },
   "dependencies": {
