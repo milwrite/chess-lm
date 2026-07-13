@@ -1,0 +1,52 @@
+# Chess / LM
+
+A responsive chess game set on a spare, monochrome shore. You play White against Stockfish at UCI Skill Level 8 while three constrained model roles read the engine's legal candidate lines from different strategic angles.
+
+**Live game:** [milwrite.github.io/chess-lm](https://milwrite.github.io/chess-lm/)
+
+## What is here
+
+- A legal, draggable, click-to-move board powered by `chess.js` and `react-chessboard`.
+- Stockfish 18 Lite in a dedicated browser worker, configured with `Skill Level 8` and three principal variations.
+- New game, undo, board flip, sound, move history, check and game-over states, and promotion.
+- A responsive council that turns Stockfish evidence into brief positional, tactical, and structural guidance.
+- Desktop and mobile layouts shaped from original interface concepts and an original shoreline image.
+- A GitHub Pages release workflow that tests, lints, builds, and deploys every push to `main`.
+
+## Model guidance set
+
+[`model/council-prompts.json`](model/council-prompts.json) defines The Witness, The Knight, and The Bishop. Each role receives the current FEN plus three legal Stockfish candidates and must select one candidate in a one-sentence response. Stockfish `bestmove` remains the move played on the board.
+
+[`model/evals/positions.json`](model/evals/positions.json) supplies six legal evaluation positions. The validation script checks FEN legality, prompt structure, role identifiers, and the candidate-move gate. The browser uses a deterministic local renderer today, while [`model/README.md`](model/README.md) describes a provider-neutral server adapter for future language-model calls.
+
+The public game runs entirely in the browser and requires no API credential. A future model provider belongs behind a server route so its key remains private.
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Before a release:
+
+```bash
+npm test
+npm run lint
+npm run build
+```
+
+## Structure
+
+- `src/engine/` — Stockfish worker protocol, UCI parsing, and chess notation.
+- `src/model/` — deterministic engine-grounded council renderer.
+- `model/` — reusable role prompts, contract, and evaluation set.
+- `docs/design/` — generated desktop and mobile concepts plus implementation captures.
+- `public/engine/` — Stockfish 18 Lite JavaScript, WebAssembly, and license.
+- `.github/workflows/deploy.yml` — GitHub Pages release.
+
+## Open-source foundation
+
+The board uses [chess.js](https://github.com/jhlywa/chess.js) for rules and [react-chessboard](https://github.com/Clariity/react-chessboard) for responsive interaction. The opponent uses [Stockfish.js](https://github.com/nmrugg/stockfish.js), which packages the [Stockfish](https://github.com/official-stockfish/Stockfish) engine for browsers. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the full license list.
+
+Chess / LM is distributed under GPL-3.0-only because it includes Stockfish.js.
