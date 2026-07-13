@@ -816,6 +816,111 @@
   }
 }
 
+@media (min-width: 821px) and (max-height: 720px) {
+  .site-header {
+    min-height: 54px;
+  }
+
+  .game-shell {
+    --play-size: min(calc(100dvh - 218px), calc(50vw - 2rem), 540px);
+
+    grid-template-columns: minmax(20rem, calc(var(--play-size) + 3rem)) minmax(0, 1fr);
+    width: min(100% - 1rem, 980px);
+    margin-top: 0.5rem;
+  }
+
+  .board-column {
+    padding: 0.5rem;
+  }
+
+  .board-column > .player-bar,
+  .board-column > .game-controls,
+  .board-column > .engine-error {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .board-column > .board-frame {
+    width: var(--play-size);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .player-bar {
+    min-height: 42px;
+  }
+
+  .player-avatar {
+    width: 44px;
+  }
+
+  .player-avatar svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .player-copy {
+    gap: 0;
+    padding: 0.35rem 0.65rem;
+  }
+
+  .player-copy strong {
+    font-size: 1rem;
+  }
+
+  .player-copy span {
+    font-size: 0.64rem;
+  }
+
+  .turn-status {
+    padding: 0 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .board-frame {
+    padding: 5px;
+  }
+
+  .game-controls {
+    margin-top: 0.4rem;
+  }
+
+  .control {
+    min-height: 40px;
+    gap: 0.25rem;
+    padding: 0.3rem 0.15rem;
+    font-size: 0.59rem;
+    letter-spacing: 0.035em;
+  }
+
+  .control svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .council {
+    padding: 1rem 1.25rem;
+  }
+
+  .council-heading {
+    padding-bottom: 0.7rem;
+  }
+
+  .council-heading h2 {
+    font-size: 1.6rem;
+  }
+
+  .adviser {
+    padding: 0.65rem 0 0.7rem;
+  }
+
+  .adviser-copy,
+  .adviser-line {
+    margin-top: 0.35rem;
+  }
+}
+
 @media (max-width: 820px) {
   .app-shell {
     background:
@@ -858,7 +963,18 @@
   }
 
   .board-column {
+    --play-size: min(100%, calc(100dvh - 360px));
+
     padding: 0.45rem;
+  }
+
+  .board-column > .player-bar,
+  .board-column > .board-frame,
+  .board-column > .game-controls,
+  .board-column > .engine-error {
+    width: var(--play-size);
+    margin-right: auto;
+    margin-left: auto;
   }
 
   .player-bar {
@@ -1144,6 +1260,70 @@
     min-height: 70px;
     gap: 0.7rem;
     font-size: 0.74rem;
+  }
+}
+
+@media (max-width: 820px) and (max-height: 760px) {
+  .site-header {
+    min-height: 56px;
+  }
+
+  .game-shell {
+    margin-top: 0.75rem;
+  }
+
+  .board-column {
+    --play-size: min(100%, calc(100dvh - 292px));
+  }
+
+  .player-bar {
+    min-height: 52px;
+  }
+
+  .player-avatar {
+    width: 50px;
+  }
+
+  .player-avatar svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .player-copy {
+    gap: 0;
+    padding: 0.4rem 0.65rem;
+  }
+
+  .player-copy strong {
+    font-size: 1.05rem;
+  }
+
+  .player-copy span {
+    font-size: 0.64rem;
+  }
+
+  .turn-status {
+    font-size: 0.88rem;
+  }
+
+  .game-controls {
+    margin-top: 0.45rem;
+  }
+
+  .control {
+    flex-direction: row;
+    min-height: 48px;
+    gap: 0.4rem;
+    padding: 0.4rem 0.3rem;
+    font-size: 0.65rem;
+  }
+
+  .control--sound {
+    min-height: 40px;
+  }
+
+  .council {
+    margin-top: 0.65rem;
   }
 }
 
