@@ -418,8 +418,8 @@
 .adviser-line {
   margin: 0.65rem 0 0 4rem;
   color: var(--bone-muted);
-  font-size: 0.78rem;
-  line-height: 1.6;
+  font-size: 0.95rem;
+  line-height: 1.55;
 }
 
 .chess-coach {
@@ -464,7 +464,7 @@
   display: block;
   margin-top: 0.12rem;
   color: #858880;
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   letter-spacing: 0.075em;
   text-transform: uppercase;
 }
@@ -501,7 +501,7 @@
   margin: 0.75rem 0 0 3rem;
   color: var(--bone-muted);
   font-family: var(--display-font);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   line-height: 1.55;
 }
 
@@ -536,9 +536,9 @@
 }
 
 .adviser-line {
-  color: rgba(225, 221, 209, 0.62);
+  color: rgba(225, 221, 209, 0.72);
   font-family: var(--display-font);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   letter-spacing: 0.045em;
 }
 
@@ -625,7 +625,7 @@
   color: var(--bone-muted);
   text-align: center;
   font-family: var(--display-font);
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   line-height: 1.45;
 }
 
@@ -1235,7 +1235,7 @@
   .adviser-copy,
   .adviser-line {
     padding-left: 3.25rem;
-    font-size: 0.73rem;
+    font-size: 0.95rem;
   }
 
   .death-decision h3 {
@@ -1244,7 +1244,7 @@
 
   .chess-coach > p {
     margin-left: 0;
-    font-size: 0.76rem;
+    font-size: 0.95rem;
   }
 
   .chess-coach > button {
@@ -1253,7 +1253,7 @@
   }
 
   .death-decision > p {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 
   .site-footer {
