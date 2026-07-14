@@ -1,4 +1,4 @@
-import { ChevronDown, Cross, Eye, Skull, Swords } from 'lucide-react'
+import { Activity, BrainCircuit, Cpu, ScanSearch, Swords } from 'lucide-react'
 import type { CouncilReading, GuideId } from '../model/modelGuide'
 import type { CoachState } from '../model/ollamaCoach'
 import { ChessCoach } from './ChessCoach'
@@ -13,9 +13,15 @@ type CouncilProps = {
 }
 
 const iconByGuide = {
-  witness: Eye,
+  witness: ScanSearch,
   knight: Swords,
-  bishop: Cross,
+  bishop: Activity,
+}
+
+const labelByGuide = {
+  witness: 'Evaluation',
+  knight: 'Tactics',
+  bishop: 'Position',
 }
 
 const waitingCopy = {
@@ -40,15 +46,11 @@ export function Council({
 
   return (
     <aside className="council" aria-labelledby="council-title">
+      <ChessCoach coach={coach} onRetry={onCoachRetry} />
+
       <div className="council-heading">
-        <h2 id="council-title">The council</h2>
-        <div className={`signal ${thinking ? 'signal--active' : ''}`} aria-hidden="true">
-          <i />
-          <i />
-          <i />
-          <i />
-          <i />
-        </div>
+        <BrainCircuit aria-hidden="true" />
+        <h2 id="council-title">Analysis</h2>
       </div>
 
       <div className="adviser-list">
@@ -69,10 +71,9 @@ export function Council({
                 <span className="adviser-icon" aria-hidden="true">
                   <Icon strokeWidth={1.25} />
                 </span>
-                <span className="adviser-name">{adviser.name}</span>
+                <span className="adviser-name">{labelByGuide[adviser.id]}</span>
                 <span className="adviser-move">{adviser.move}</span>
                 <span className="adviser-eval">{adviser.evaluation}</span>
-                <ChevronDown className="adviser-chevron" aria-hidden="true" />
               </button>
               <p className="adviser-copy">{adviser.counsel}</p>
               {adviser.continuation ? (
@@ -87,24 +88,16 @@ export function Council({
 
       <div className={`death-decision ${thinking ? 'death-decision--thinking' : ''}`}>
         <div className="death-decision__heading">
-          <Skull aria-hidden="true" strokeWidth={1.2} />
-          <h3>Death considers</h3>
-          <span className="thinking-dots" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-          </span>
+          <Cpu aria-hidden="true" strokeWidth={1.5} />
+          <h3>Engine move</h3>
         </div>
         <strong className="death-decision__move">{reading?.decision ?? '…'}</strong>
         <p>
           {reading?.decisionLine ??
-            'Move first. The engine will search, and the council will read its candidate lines.'}
+            'Move first. Stockfish will search, and the analysis will update from its candidate lines.'}
         </p>
       </div>
 
-      <ChessCoach coach={coach} onRetry={onCoachRetry} />
     </aside>
   )
 }
