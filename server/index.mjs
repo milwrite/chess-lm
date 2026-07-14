@@ -18,9 +18,6 @@ const allowedOrigins = new Set(
     .filter(Boolean),
 )
 
-const rateWindowMs = 10 * 60 * 1_000
-const rateLimit = 12
-const requestCounts = new Map()
 const responseCache = new Map()
 const cacheTtlMs = 10 * 60 * 1_000
 
@@ -58,24 +55,6 @@ async function readJson(request) {
   } catch {
     throw new CoachInputError('The coaching request must use JSON.')
   }
-}
-
-function clientAddress(request) {
-  return String(request.headers['x-forwarded-for'] || request.socket.remoteAddress || 'unknown')
-    .split(',')[0]
-    .trim()
-}
-
-function consumeRateLimit(address) {
-  const now = Date.now()
-  const record = requestCounts.get(address)
-  if (!record || now - record.startedAt >= rateWindowMs) {
-    requestCounts.set(address, { count: 1, startedAt: now })
-    return true
-  }
-  if (record.count >= rateLimit) return false
-  record.count += 1
-  return true
 }
 
 function cacheKey(position) {
@@ -119,12 +98,6 @@ const server = createServer(async (request, response) => {
 
   if (origin && !allowedOrigins.has(origin)) {
     sendJson(response, 403, { error: 'Origin is outside the coach service allowlist.' }, origin)
-    return
-  }
-
-  const address = clientAddress(request)
-  if (!consumeRateLimit(address)) {
-    sendJson(response, 429, { error: 'Coach request limit reached. Try again shortly.' }, origin)
     return
   }
 

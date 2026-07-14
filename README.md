@@ -24,7 +24,7 @@ The chess game and Stockfish engine run in the browser. A small server route sen
 
 ## Chess Coach
 
-The browser sends the current FEN, recent PGN, player move, Stockfish reply, and three legal Stockfish candidates to `POST /api/coach`. The server validates the position, limits request frequency, caches repeated positions briefly, and calls `deepseek-v4-flash:cloud` in direct response mode. Stockfish has already played its move and calculated the comparison lines, so the language model can concentrate on a concise explanation. The response contains plain coaching prose plus the model name; the browser receives no provider credential.
+The browser sends the current FEN, recent PGN, player move, Stockfish reply, and three legal Stockfish candidates to `POST /api/coach`. The server validates the position, caps request size, caches repeated positions briefly, and calls `deepseek-v4-flash:cloud` in direct response mode. Stockfish has already played its move and calculated the comparison lines, so the language model can concentrate on a concise explanation. The response contains plain coaching prose plus the model name; the browser receives no provider credential.
 
 Current chess-language research supports this division of labor. ChessArena reports that general language models still fall below a modest chess engine, while its chess-tuned Qwen3-8B improves sharply. ChessQA places DeepSeek and Qwen families among strong open models for chess understanding. Chess / LM therefore uses the language model for explanation and retains Stockfish for legal move selection.
 
@@ -57,7 +57,7 @@ npm run build
 
 - `src/engine/` — Stockfish worker protocol, UCI parsing, and chess notation.
 - `src/model/` — deterministic engine-grounded council renderer.
-- `server/` — validated, rate-limited Ollama Cloud proxy.
+- `server/` — validated Ollama Cloud proxy with a short response cache.
 - `model/` — reusable role prompts, contract, and evaluation set.
 - `docs/design/` — generated desktop and mobile concepts plus implementation captures.
 - `public/engine/` — Stockfish 18 Lite JavaScript, WebAssembly, and license.
