@@ -2054,3 +2054,33 @@
     min-height: 78px;
   }
 }
+
+@media (min-width: 821px) and (max-height: 720px) {
+  .site-header {
+    min-height: 54px;
+  }
+
+  .game-shell {
+    --play-size: min(calc(100dvh - 218px), calc(50vw - 2rem), 540px);
+
+    grid-template-columns: minmax(20rem, calc(var(--play-size) + 3rem)) minmax(0, 1fr);
+    width: min(100% - 1rem, 980px);
+    margin-top: 0.5rem;
+  }
+
+  .board-column {
+    --play-size: min(calc(100dvh - 218px), calc(50vw - 2rem), 540px);
+
+    padding: 0.5rem 0.5rem 0;
+  }
+
+  .board-column > .player-bar,
+  .board-column > .game-controls,
+  .board-column > .engine-error {
+    width: 100%;
+  }
+
+  .board-column > .board-frame {
+    width: var(--play-size);
+  }
+}
