@@ -9,6 +9,8 @@ import {
   Volume2,
   VolumeX,
 } from 'lucide-react'
+import { BrandMark } from './components/BrandMark'
+import { ChessCoach } from './components/ChessCoach'
 import { Council } from './components/Council'
 import { MoveLedger } from './components/MoveLedger'
 import { PlayerBar } from './components/PlayerBar'
@@ -32,10 +34,10 @@ type EngineState = 'loading' | 'ready' | 'error'
 function gameStatus(game: Chess, thinking: boolean, engineState: EngineState) {
   if (engineState === 'loading') return 'Engine loading'
   if (engineState === 'error') return 'Engine unavailable'
-  if (game.isCheckmate()) return game.turn() === 'w' ? 'Stockfish wins' : 'You win'
+  if (game.isCheckmate()) return game.turn() === 'w' ? 'Death wins' : 'You win'
   if (game.isDraw()) return 'Draw'
-  if (game.isCheck()) return thinking ? 'Engine thinking' : 'Check'
-  return thinking ? 'Engine thinking' : 'Your move'
+  if (game.isCheck()) return thinking ? 'Death considers' : 'Check'
+  return thinking ? 'Death considers' : 'Your move'
 }
 
 function App() {
@@ -287,20 +289,20 @@ function App() {
     const styles: Record<string, React.CSSProperties> = {}
     lastMove?.forEach((square) => {
       styles[square] = {
-        boxShadow: 'inset 0 0 0 3px rgba(88, 166, 255, .82)',
+        boxShadow: 'inset 0 0 0 3px rgba(129, 45, 42, .82)',
       }
     })
     if (selectedSquare) {
       styles[selectedSquare] = {
         ...styles[selectedSquare],
-        boxShadow: 'inset 0 0 0 4px #58a6ff',
+        boxShadow: 'inset 0 0 0 4px #91342f',
       }
     }
     legalSquares.forEach((square) => {
       styles[square] = {
         ...styles[square],
         backgroundImage:
-          'radial-gradient(circle, rgba(88, 166, 255, .9) 0 13%, transparent 15%)',
+          'radial-gradient(circle, rgba(119, 38, 35, .86) 0 13%, transparent 15%)',
       }
     })
     return styles
@@ -308,7 +310,7 @@ function App() {
 
   const boardOptions = useMemo<ChessboardOptions>(
     () => ({
-      id: 'chess-lm-board',
+      id: 'seventh-seal-board',
       position: fen,
       boardOrientation: orientation,
       onPieceDrop: ({ sourceSquare, targetSquare }) =>
@@ -327,18 +329,18 @@ function App() {
       animationDurationInMs: 230,
       boardStyle: {
         borderRadius: 0,
-        boxShadow: 'none',
+        boxShadow: '0 18px 48px rgba(0, 0, 0, .48)',
       },
-      lightSquareStyle: { backgroundColor: '#d5d8dc' },
-      darkSquareStyle: { backgroundColor: '#5c6269' },
+      lightSquareStyle: { backgroundColor: '#d4d0c5' },
+      darkSquareStyle: { backgroundColor: '#272a29' },
       lightSquareNotationStyle: {
-        color: '#333940',
+        color: '#272a29',
         fontFamily: 'var(--ui-font)',
         fontSize: 11,
         fontWeight: 700,
       },
       darkSquareNotationStyle: {
-        color: '#edf1f4',
+        color: '#d4d0c5',
         fontFamily: 'var(--ui-font)',
         fontSize: 11,
         fontWeight: 700,
@@ -348,12 +350,21 @@ function App() {
   )
 
   const status = gameStatus(gameRef.current, thinking, engineState)
+  const shoreline = `${import.meta.env.BASE_URL}assets/shoreline.webp`
+
   return (
     <div className="app-shell">
+      <div
+        className="shoreline-scene"
+        style={{ backgroundImage: `url(${shoreline})` }}
+        aria-hidden="true"
+      />
       <header className="site-header">
         <a className="brand" href="#game" aria-label="Chess LM home">
+          <BrandMark />
           <span>Chess / LM</span>
         </a>
+        <p>Play the position. Read the machine.</p>
         <a className="header-source" href="https://github.com/milwrite/chess-lm">
           Source
         </a>
@@ -405,18 +416,29 @@ function App() {
           ) : null}
         </section>
 
+        <section className="coach-strip" aria-label="Chess Coach">
+          <ChessCoach coach={coach} onRetry={retryCoach} />
+        </section>
+
         <Council
           reading={council}
-          coach={coach}
           activeGuide={activeGuide}
           onGuideChange={setActiveGuide}
-          onCoachRetry={retryCoach}
           thinking={thinking}
         />
 
         <MoveLedger history={history} activeTab={activeTab} onTabChange={setActiveTab} />
       </main>
 
+      <footer className="site-footer">
+        <button type="button" onClick={() => setActiveTab('method')}>
+          How it works
+        </button>
+        <span aria-hidden="true" />
+        <a href="https://github.com/milwrite/chess-lm/blob/main/model/README.md">Model guide</a>
+        <span aria-hidden="true" />
+        <a href="https://github.com/milwrite/chess-lm">Source</a>
+      </footer>
     </div>
   )
 }

@@ -2,7 +2,7 @@
   "name": "chess-lm",
   "private": true,
   "version": "1.0.0",
-  "description": "A compact chess workspace with Stockfish Level 8 and an engine-grounded Chess Coach.",
+  "description": "A Seventh Seal-inspired chess game with Stockfish Level 8 and an engine-grounded model council.",
   "license": "GPL-3.0-only",
   "engines": {
     "node": ">=22.12.0"
