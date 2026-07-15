@@ -364,7 +364,6 @@ function App() {
           <BrandMark />
           <span>Chess / LM</span>
         </a>
-        <p>Play the position. Read the machine.</p>
         <a className="header-source" href="https://github.com/milwrite/chess-lm">
           Source
         </a>

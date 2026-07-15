@@ -40,7 +40,7 @@
 
 .site-header {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto;
   align-items: center;
   width: min(100% - 3rem, 1440px);
   min-height: 72px;
@@ -70,14 +70,6 @@
   stroke-linecap: square;
   stroke-linejoin: miter;
   stroke-width: 1.15;
-}
-
-.site-header > p {
-  margin: 0;
-  color: var(--bone-muted);
-  font-family: var(--display-font);
-  font-size: 0.95rem;
-  letter-spacing: 0.06em;
 }
 
 .header-source {
@@ -1066,10 +1058,6 @@
     grid-template-columns: 1fr auto;
     width: calc(100% - 1.5rem);
     min-height: 64px;
-  }
-
-  .site-header > p {
-    display: none;
   }
 
   .brand {
