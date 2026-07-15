@@ -371,7 +371,11 @@ function App() {
       </header>
 
       <main id="game" className="game-shell">
-        <section className="board-column" aria-label="Chess board">
+        <section
+          className="board-column"
+          aria-label="Chess board"
+          style={{ backgroundImage: `linear-gradient(rgba(9, 11, 11, 0.84), rgba(9, 11, 11, 0.94)), url(${shoreline})` }}
+        >
           <PlayerBar side="death" />
           <div className="board-frame">
             <Chessboard options={boardOptions} />
